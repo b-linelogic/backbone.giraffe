@@ -1,6 +1,6 @@
 {
   "name": "backbone.giraffe",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "description": "A lightweight library that extends Backbone.js to new heights.",
   "main": "dist/backbone.giraffe.js",
   "scripts": {
@@ -16,13 +16,22 @@
     "url": "https://github.com/barc/backbone.giraffe.git"
   },
   "author": "Ryan Atkinson <ryanatkn@gmail.com>",
+  "contributors": [
+    {"name": "Rick Geneva", "email": "rgeneva@b-linelogic.com"}
+  ],
   "license": "MIT",
   "gitHead": "66b00448e9e26feea356d13f926624f1d904aaaf",
   "devDependencies": {
-    "async": "~0.2.9",
+    "async": "~1.5.0",
     "pm-tutdown": "0.0.2",
-    "mocha": "~1.12.0",
-    "chai": "~1.7.2",
-    "sinon": "~1.7.3"
+    "mocha": "~2.3.4",
+    "chai": "~3.4.2",
+    "sinon": "~1.17.0",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-requirejs": "*",
+    "grunt-import": "*",
+    "grunt-contrib-coffee": "*"
   }
 }

@@ -1,9 +1,11 @@
 {
   "name": "backbone.giraffe",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "homepage": "https://github.com/barc/backbone.giraffe",
   "authors": [
-    "Ryan Atkinson <ryanatkn@gmail.com>"
+    "Ryan Atkinson <ryanatkn@gmail.com>",
+    "Rick Geneva <rgeneva@b-linelogic.com>",
+    "Kevin Carlson <kcarson@b-linelogic.com>"
   ],
   "description": "A lightweight library that extends Backbone.js to new heights.",
   "main": "dist/backbone.giraffe.js",
