@@ -1261,6 +1261,7 @@
         this._onUnload = bind(this._onUnload, this);
         this.app = this;
         this._initializers = [];
+        this._viewLibrary = {};
         this.started = false;
         App.__super__.constructor.apply(this, arguments);
       }
@@ -1317,11 +1318,11 @@
        * }
        * ```
        *
-       * @property viewLibrary
+       * @property _viewLibrary
        * @type {Object}
        * @default null
        */
-      App.prototype.viewLibrary = null;
+      App.prototype._viewLibrary = null;
 
 
       /*
@@ -1735,6 +1736,29 @@
 
       Router.prototype._dispose = function() {
         return this._unbindTriggers();
+      };
+
+      /*
+       * Naviates to the view with the given name in the app's `_viewLibrary` property, else
+       * shows a 404 error if the view name is not a key in the `_viewLibrary` property.
+       *
+       * @param viewName {String} The name of the view, which MUST be listed in the
+       * app._viewLibrary property, to be navigated to
+       */
+      Router.prototype.navigateToView = function (viewName) {
+        var self = this;
+        var app = self.app;
+        var viewLibrary = app._viewLibrary;
+        var newViewFn = viewLibrary[viewName];
+        if (_.isFunction(newViewFn)) {
+          var previousView = self.activeView;
+          if (previousView) previousView.remove();
+          self.$el.emtpy();
+          self.activeView = new newViewFn();
+          self.attach(self.activeView);
+        } else {
+          // 404 error
+        }
       };
 
       return Router;
