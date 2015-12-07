@@ -23,7 +23,7 @@ module.exports = function(grunt){
 					'src/backbone.giraffe.js': 'src/backbone.giraffe.coffee',
 					'src/backbone.giraffe.contrib.js': 'src/backbone.giraffe.contrib.coffee'
 				}
-			},
+			}
 		}
 	});
 
