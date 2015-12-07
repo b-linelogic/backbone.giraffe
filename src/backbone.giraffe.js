@@ -1298,6 +1298,31 @@
         return this.dispose();
       };
 
+      /*
+       * Enumerates the views available as children to this app.
+       * Declared as an object where the key is the view name and the
+       * value is the view constructor. The view name can then be used by the
+       * appEvents object to navigate to the given view on a given app route event.
+       *
+       * @example ```
+       * {
+       *  home: Giraffe.View.extend({
+       *    ui: {
+       *      $main: 'div.main'
+       *    },
+       *    afterRender: function () {
+       *      this.$main.html('I am the home view');
+       *    }
+       *  })
+       * }
+       * ```
+       *
+       * @property viewLibrary
+       * @type {Object}
+       * @default null
+       */
+      App.prototype.viewLibrary = null;
+
 
       /*
       * Similar to the `events` hash of __Backbone.View__, `appEvents` maps events
