@@ -1362,6 +1362,22 @@
 
       App.prototype.routes = null;
 
+      /*
+       * Attaches a basic 404 error for a not found view.
+       * Can be overridden as desired, but should maintain the method signature.
+       * @param viewName {String} The name of the view that could not be navigated to
+       * @param message {String} The message to display with the 404 error. Defaults to '404 Error: View, ' + viewName + ', not found'
+       */
+      App.prototype.error404 = function (viewName, message) {
+        var self = this;
+        var $errElement = $('<div/>');
+        $errElement.addClass('alert alert-warning');
+        var msg = message || '404 Error: View, ' + viewName + ', not found';
+        $errElement.text(msg);
+        self.$el.empty();
+        self.$el.append($errElement);
+      }
+
 
       /*
       * Queues up the provided function to be run on `start`. The functions you
@@ -1751,14 +1767,12 @@
         var viewLibrary = app._viewLibrary;
         var newViewFn = viewLibrary[viewName];
         if (_.isFunction(newViewFn)) {
-          var previousView = self.activeView;
+          var previousView = app.activeView;
           if (previousView) previousView.remove();
-          self.$el.emtpy();
-          self.activeView = new newViewFn();
-          self.attach(self.activeView);
-        } else {
-          // 404 error
-        }
+          app.$el.empty();
+          app.activeView = new newViewFn();
+          app.attach(app.activeView);
+        } else app.error404(viewName);
       };
 
       return Router;
