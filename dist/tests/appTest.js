@@ -1,7 +1,8 @@
 (function() {
-  var assert, ut;
+  var assert, expect, ut;
 
   assert = chai.assert;
+  expect = chai.expect;
 
   ut = window.ut;
 
@@ -29,7 +30,7 @@
       app = new MyApp;
       return app.start();
     });
-    return it('should accept appEvents as an option', function(done) {
+    it('should accept appEvents as an option', function(done) {
       var app;
       app = new Giraffe.App({
         appEvents: {
@@ -39,6 +40,13 @@
         }
       });
       return app.start();
+    });
+    return it('should set _viewLibrary as an empty object on construction', function (done) {
+      var app;
+      app = new Giraffe.App();
+      assert(app._viewLibrary != null, "Expected App._viewLibrary not to be null, but it was");
+      assert(_.isPlainObject(app._viewLibrary) === true, "Expected app._viewLibrary to be a plain object but it was not");
+      assert(_.keys(app._viewLibrary).length === 0, "Expected app._viewLibrary to be empty but it was not");
     });
   });
 
