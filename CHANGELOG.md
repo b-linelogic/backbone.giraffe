@@ -1,5 +1,13 @@
 ## Changelog
 
+### 0.3.0
+
+- Added support for cached templates using any template engine using `cacheTemplate` and `cacheTemplates` functions along with `getTemplate`
+- Added templateStrategy 'cache'
+- Added support for global `Giraffe.templateFunction` which allows for Mustache, Handlebars, Dot.js, underscore.template or ES6 String.template
+- Removed support for .coffee.  Sorry Coffee lovers; we drink water and do energy shots.
+
+
 ### 0.2.8
 
 - Fixed AMD loader.
