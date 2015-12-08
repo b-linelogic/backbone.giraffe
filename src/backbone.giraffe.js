@@ -450,15 +450,19 @@
 
 
       /*
-      * Gets the data passed to the `template`. Returns the view by default.
-      *
-      * @caption Override this function to pass custom data to a view's `template`.
+       * Gets the data passed to the `template`.
+       * If object `templateProperties` is added to the view then return templateProperties.
+       * Returns the view by default.
+       *
+       * @caption Override this function to pass custom data to a view's `template`.
+       * @example:  `var MyView = Giraffe.View.extend({ serialize: function(){ return _.extend({custom:'Yes'},this.model.attributes || {}) } })`
        */
 
-      View.prototype.serialize = function() {
+      View.prototype.serialize = function(){
+        if (_.isObject(this.templateProperties))
+          return this.templateProperties;
         return this;
       };
-
 
       /*
       * Detaches the view from the DOM. If `view.disposeOnDetach` is `true`,
