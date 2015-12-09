@@ -1,7 +1,8 @@
 (function() {
-  var assert, ut;
+  var assert, expect, ut;
 
   assert = chai.assert;
+  expect = chai.expect;
 
   ut = window.ut;
 
@@ -40,13 +41,24 @@
       });
       return app.start();
     });
-    return it('should set _viewLibrary as an empty object on construction', function () {
-      var app;
-      app = new Giraffe.App();
-      assert(app._viewLibrary != null, "Expected App._viewLibrary not to be null, but it was");
-      var isPlainObject = !_.isArray(app._viewLibrary) && !_.isFunction(app._viewLibrary) && _.isObject(app._viewLibrary);
-      assert(isPlainObject === true, "Expected app._viewLibrary to be a plain object but it was not");
-      assert(_.keys(app._viewLibrary).length === 0, "Expected app._viewLibrary to be empty but it was not");
+    it('should throw an error when asked to navigate to a non existent view', function (done) {
+      var app = new Giraffe.App();
+      try {
+        app.navigateToView('na');
+        assert(1 === 0, "App.navigateToView should have thrown an error and it did not");
+      } catch (e) {
+        expect(e.message).equals('View, na, does not exist');
+        done();
+      }
+    });
+    return it('should navigate to an added view', function () {
+      var testView = Giraffe.View.extend({
+        text: 'TestView'
+      });
+      var app = new Giraffe.App();
+      Giraffe.addViewToLibrary('test2', testView);
+      app.navigateToView('test2');
+      assert(app.children.length === 1, "Expected app to have 1 child but it had " + app.children.length);
     });
   });
 

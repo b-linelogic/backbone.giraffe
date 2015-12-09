@@ -168,6 +168,52 @@
 
 	  Giraffe.cacheTemplates = cacheTemplates;
 
+
+    /*
+     * Singleton view constructor store. Keys are view names, values
+     * are the corresponding view constructors
+     * @property viewLibrary
+     * @type {Object}
+     */
+    var viewLibrary = Giraffe.viewLibrary = {};
+
+    /*
+     * Adds a view to the view constructor library
+     * @param name {String} The name of the view constructor to add
+     * @param constructor {Function} The view constructor
+     */
+    var addViewToLibrary = function (name, constructor) {
+      if (!_.isString(name)) throw new Error('View name to add to library must be a string');
+      if (!_.isFunction(constructor)) throw new Error('View constructor to add to library must be a function');
+      var existingView = viewLibrary[name];
+      if (existingView) throw new Error('View, ' + name + ', already exists in the view library');
+      viewLibrary[name] = constructor;
+    };
+    Giraffe.addViewToLibrary = addViewToLibrary;
+
+    /*
+     * Adds a group of views to the view library singleton
+     * @param views {Object} An object with view names as keys and the
+     * corresponding constructors as the values
+     */
+     var addViewsToLibrary = function (views) {
+       if (_.isFunction(views) || _.isArray(views) || !_.isObject(views)) throw new Error('Views must be added to view library as an object');
+       _.forEach(views, function (constructor, name) {
+         addViewToLibrary(name, constructor);
+       });
+     };
+     Giraffe.addViewsToLibrary = addViewsToLibrary;
+
+    /*
+     * Gets a view constructor from the view library by name if it exists,
+     * else returns undefined
+     * @param viewName {String} The name of the view constructor to get from the view library
+     */
+    var getViewFromLibrary = function (viewName) {
+      return viewLibrary[viewName];
+    };
+    Giraffe.getViewFromLibrary = getViewFromLibrary;
+
     /*
     * __Giraffe.View__ is optimized for simplicity and flexibility. Views can move
     * around the DOM safely and freely with the `attachTo` method, which accepts any
@@ -1265,7 +1311,6 @@
         this._onUnload = bind(this._onUnload, this);
         this.app = this;
         this._initializers = [];
-        this._viewLibrary = {};
         this.started = false;
         App.__super__.constructor.apply(this, arguments);
       }
@@ -1304,32 +1349,6 @@
       };
 
       /*
-       * Enumerates the views available as children to this app.
-       * Declared as an object where the key is the view name and the
-       * value is the view constructor. The view name can then be used by the
-       * appEvents object to navigate to the given view on a given app route event.
-       *
-       * @example ```
-       * {
-       *  home: Giraffe.View.extend({
-       *    ui: {
-       *      $main: 'div.main'
-       *    },
-       *    afterRender: function () {
-       *      this.$main.html('I am the home view');
-       *    }
-       *  })
-       * }
-       * ```
-       *
-       * @property _viewLibrary
-       * @type {Object}
-       * @default null
-       */
-      App.prototype._viewLibrary = null;
-
-
-      /*
       * Similar to the `events` hash of __Backbone.View__, `appEvents` maps events
       * on `this.app` to methods on a __Giraffe__ object. App events can be
       * triggered from routes or by any object in your application. If a
@@ -1365,22 +1384,6 @@
        */
 
       App.prototype.routes = null;
-
-      /*
-       * Attaches a basic 404 error for a not found view.
-       * Can be overridden as desired, but should maintain the method signature.
-       * @param viewName {String} The name of the view that could not be navigated to
-       * @param message {String} The message to display with the 404 error. Defaults to '404 Error: View, ' + viewName + ', not found'
-       */
-      App.prototype.error404 = function (viewName, message) {
-        var self = this;
-        var $errElement = $('<div/>');
-        $errElement.addClass('alert alert-warning');
-        var msg = message || '404 Error: View, ' + viewName + ', not found';
-        $errElement.text(msg);
-        self.$el.empty();
-        self.$el.append($errElement);
-      }
 
 
       /*
@@ -1454,6 +1457,25 @@
         })(this);
         next();
         return this;
+      };
+
+      /*
+       * Naviates to the view with the given name in the `viewLibrary` property, else
+       * throws and error if the view name is not a key in the `viewLibrary` property.
+       *
+       * @param viewName {String} The name of the view, which MUST be listed in the
+       * app._viewLibrary property, to be navigated to
+       */
+      App.prototype.navigateToView = function (viewName) {
+        var self = this;
+        var viewConstructor = getViewFromLibrary(viewName);
+        if (viewConstructor) {
+          var previousView = self.activeView;
+          if (previousView) previousView.remove();
+          self.$el.empty();
+          self.activeView = new viewConstructor();
+          self.attach(self.activeView);
+        } else throw new Error('View, ' + viewName + ', does not exist');
       };
 
       return App;
@@ -1756,27 +1778,6 @@
 
       Router.prototype._dispose = function() {
         return this._unbindTriggers();
-      };
-
-      /*
-       * Naviates to the view with the given name in the app's `_viewLibrary` property, else
-       * shows a 404 error if the view name is not a key in the `_viewLibrary` property.
-       *
-       * @param viewName {String} The name of the view, which MUST be listed in the
-       * app._viewLibrary property, to be navigated to
-       */
-      Router.prototype.navigateToView = function (viewName) {
-        var self = this;
-        var app = self.app;
-        var viewLibrary = app._viewLibrary;
-        var newViewFn = viewLibrary[viewName];
-        if (_.isFunction(newViewFn)) {
-          var previousView = app.activeView;
-          if (previousView) previousView.remove();
-          app.$el.empty();
-          app.activeView = new newViewFn();
-          app.attach(app.activeView);
-        } else app.error404(viewName);
       };
 
       return Router;
