@@ -6,11 +6,29 @@ requirejs.config({
 
 define(['text!template1.htm'], function(templates_1){
 
+	var $template_container = $(templates_1);
+	Giraffe.cacheTemplates( $template_container.find("template") );
+
 	var ThisApp = new Giraffe.App({
 		templateStrategy: "cache",
-		templateName: "home"
+		template: "home",
 
+		routes: {
+			'': 'route:home',
+			'/': 'route:home',
+			'about': 'route:about',
+			'contact': 'route:contact'
+		},
+		appEvents: {
+
+		},
+
+		afterRender:function(){
+			console.log("App is rendered");
+		}
 	});
+
+
 
 
 	ThisApp.attachTo("#GIRAFFE_APP");

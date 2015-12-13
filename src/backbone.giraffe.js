@@ -116,7 +116,7 @@
 		  if(arguments.length === 2){
 			  templateCache[name] = compileFunc(t);
 		  }
-		  var args = [template];
+		  var args = [t];
 		  if(arguments.length > 3){
 			  var ext = slice.call(arguments, 3);
 			  args = args.concat(ext);
@@ -159,7 +159,7 @@
 					  console.warn("no id provided for template element",i);
 					  return;
 				  }
-				  var content = el.innerHtml;
+				  //var content = el.innerHTML;
 				  var args = [id, el, compileFunc];
 				  if (arguments.length > 2) args = args.concat(slice(arguments, 2));
 				  cacheTemplate.apply(this, args);
