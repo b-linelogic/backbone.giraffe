@@ -56,7 +56,7 @@
         text: 'TestView'
       });
       var app = new Giraffe.App();
-      Giraffe.addViewToLibrary('test2', testView);
+      Giraffe.addNamedView('test2', testView);
       app.navigateToView('test2');
       assert(app.children.length === 1, "Expected app to have 1 child but it had " + app.children.length);
     });

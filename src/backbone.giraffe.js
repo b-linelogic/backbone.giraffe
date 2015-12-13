@@ -179,40 +179,43 @@
 
     /*
      * Adds a view to the view constructor library
+     * @method addNamedView
      * @param name {String} The name of the view constructor to add
      * @param constructor {Function} The view constructor
      */
-    var addViewToLibrary = function (name, constructor) {
+    var addNamedView = function (name, constructor) {
       if (!_.isString(name)) throw new Error('View name to add to library must be a string');
       if (!_.isFunction(constructor)) throw new Error('View constructor to add to library must be a function');
       var existingView = viewLibrary[name];
       if (existingView) throw new Error('View, ' + name + ', already exists in the view library');
       viewLibrary[name] = constructor;
     };
-    Giraffe.addViewToLibrary = addViewToLibrary;
+    Giraffe.addNamedView = addNamedView;
 
     /*
      * Adds a group of views to the view library singleton
+     * @method addNamedViews
      * @param views {Object} An object with view names as keys and the
      * corresponding constructors as the values
      */
-     var addViewsToLibrary = function (views) {
+     var addNamedViews = function (views) {
        if (_.isFunction(views) || _.isArray(views) || !_.isObject(views)) throw new Error('Views must be added to view library as an object');
        _.forEach(views, function (constructor, name) {
-         addViewToLibrary(name, constructor);
+         addNamedView(name, constructor);
        });
      };
-     Giraffe.addViewsToLibrary = addViewsToLibrary;
+     Giraffe.addNamedViews = addNamedViews;
 
     /*
      * Gets a view constructor from the view library by name if it exists,
      * else returns undefined
+     * @method getNamedView
      * @param viewName {String} The name of the view constructor to get from the view library
      */
-    var getViewFromLibrary = function (viewName) {
+    var getNamedView = function (viewName) {
       return viewLibrary[viewName];
     };
-    Giraffe.getViewFromLibrary = getViewFromLibrary;
+    Giraffe.getNamedView = getNamedView;
 
     /*
     * __Giraffe.View__ is optimized for simplicity and flexibility. Views can move
@@ -1468,7 +1471,7 @@
        */
       App.prototype.navigateToView = function (viewName) {
         var self = this;
-        var viewConstructor = getViewFromLibrary(viewName);
+        var viewConstructor = getNamedView(viewName);
         if (viewConstructor) {
           var previousView = self.activeView;
           if (previousView) previousView.remove();
