@@ -6,7 +6,8 @@
 - Added templateStrategy 'cache'
 - Added support for global `Giraffe.templateFunction` which allows for Mustache, Handlebars, Dot.js, underscore.template or ES6 String.template
 - Removed support for .coffee.  Sorry Coffee lovers; we drink water and do energy shots.
-
+- Added support for named views in the global Giraffe context
+- Added support for auto-cache of elements in the ui:{} object when using data-gf-ui='$var' 
 
 ### 0.2.8
 

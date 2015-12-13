@@ -1,3 +1,6 @@
+/**
+ * @package Giraffe
+ */
 (function() {
   var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -29,6 +32,11 @@
     if (!Backbone) {
       throw new Error('Giraffe cannot find Backbone');
     }
+
+	  /**
+		* @class Giraffe
+		*
+		*/
     Giraffe = Backbone.Giraffe = {
       version: '{{VERSION}}',
       app: null,
@@ -84,7 +92,7 @@
 		* This is because it is assumed that the `<template>` tag will be used as the outer element and it will have an ID.
 		* @method cacheTemplate
 		* @param name {String} the name of the template when it is in cache
-		* @param template {The template}
+		* @param template{String} The template
 		* @param compileFunc {function} a function such as _.template(), Handlebars.compile(), Mustache.Parse, DoT.compile
 		* @example `cacheTemplate('home', '<div>Hello, {{toWho}}!</div>')` Uses Giraffe.templateFunction by default, which you can override globally.
 		* @example `cacheTemplate('home', '<div>Hello, {{toWho}}!</div>', _.template)`
@@ -123,7 +131,7 @@
 		* Note that if using element or jQuery, the innerHTML is used, not the entire element.
 		* This is because it is assumed that the `<template>` tag will be used as the outer element and it will have an ID.
 		* @method cacheTemplates
-		* @param templates {Object | jQuery | String[selector] } Pass in an array of template strings, jQuery selector or jQuery object.
+		* @param templates {Object | jQuery | String } Pass in an array of template strings, jQuery selector or jQuery object.
 		* @param compileFunc {Function} The template function to use for precomiling. See cacheTemplate.
 		* @param compileFuncArgs {*} Optional template arguments [...]
 		* @example `var templates = {home: '<div>Hello,{{toWho}}</div>'}; cacheTemplates(templates)`
@@ -269,14 +277,15 @@
     *
     * Like all __Giraffe__ objects, __Giraffe.View__ extends each instance with
     * every property in `options`.
-    *
+    *	@class Giraffe.View
     * @param {Object} [options]
      */
     Giraffe.View = (function(superClass) {
       extend(View, superClass);
 
       View.defaultOptions = {
-        disposeOnDetach: true
+        disposeOnDetach: true,
+			autoCacheElements: true
       };
 
       function View(options) {
@@ -432,6 +441,7 @@
         html = this.templateStrategy.apply(this, arguments) || '';
         this.$el.empty()[0].innerHTML = html;
         this._cacheUiElements();
+			if(this.autoCacheElements) this._autoCacheUiElements();
         this.afterRender.apply(this, arguments);
         this.trigger('rendered', this, options);
         return this;
@@ -752,26 +762,66 @@
 
       View.prototype.ui = null;
 
-      View.prototype._cacheUiElements = function() {
-        var name, ref, selector;
-        if (this.ui) {
-          ref = this.ui;
-          for (name in ref) {
-            selector = ref[name];
-            this[name] = (function() {
-              switch (typeof selector) {
-                case 'string':
-                  return this.$(selector);
-                case 'function':
-                  return selector.call(this);
-                default:
-                  return selector;
-              }
-            }).call(this);
-          }
-        }
-        return this;
-      };
+		 View.prototype._cacheUiElements = function(){
+			 var name, ref, selector, names, type;
+			 if (this.ui){
+				 ref = this.ui;
+				 names = _.keys(this.ui);
+				 var i = names.length, type_s = "string", type_f = "function";
+				 while (i > 0){
+					 name = names[i];
+					 selector = ref[name];
+					 type = typeof selector;
+					 this[name] = (function(){
+						 if(type === type_s){
+							 return this.$(selector);
+						 }
+						 else if(type === type_f){
+							 return selector.call(this);
+						 }
+						 else return selector;
+					 }).call(this);
+				 }
+				 // PERFORMANCE IMPROVEMENT - eliminate the (x in y) syntax which is slow.
+				 //for (name in ref){
+					// selector = ref[name];
+					// this[name] = (function(){
+					//	 switch (typeof selector){
+					//		 case 'string':
+					//			 return this.$(selector);
+					//		 case 'function':
+					//			 return selector.call(this);
+					//		 default:
+					//			 return selector;
+					//	 }
+					// }).call(this);
+				 //}
+			 }
+			 return this;
+		 };
+
+		 /**
+		  * Used in the render process when Giraffe.View.autoCacheUiElements = true
+		  * Automatically queries for `data-gf-ui` attributes and uses the value as a cached element name
+		  * similar to `ui` attribute.
+		  * Setting autoCacheUiElements to false on a View instance will turn off this function locally for a specific view.
+		  * Setting autoCacheUiElements to false on a View.prototype will turn off this function globally.
+		  * @example `<div data-gf-ui="$cached_element_name">This will be cached</div>`
+		  * @method _autoCacheUiElements
+		  * @private
+		  */
+		 View.prototype._autoCacheUiElements = function(){
+			 var $q = this.$('[data-gf-ui]');
+			 if($q.length){
+				 var self = this, $e, name;
+				 $q.each(function(el){
+					 $e = $(el);
+					 name = $e.data('gf-ui');
+					 if(name && !self.hasOwnProperty(name)) self[name] = $e;
+					 else console.warn('data-gf-ui auto-cache element skipped because this['+name+'] already exists');
+				 });
+			 }
+		 };
 
       View.prototype._uncacheUiElements = function() {
         var name;
@@ -822,6 +872,8 @@
           return eventKey;
         }
       };
+
+
 
 
       /*
@@ -1304,7 +1356,7 @@
     *
     * Like all __Giraffe__ objects, __Giraffe.App__ extends each instance with
     * every property in `options`.
-    *
+    *	@class App
     * @param {Object} [options]
      */
     Giraffe.App = (function(superClass) {

@@ -32,6 +32,8 @@
     "grunt-contrib-copy": "*",
     "grunt-contrib-requirejs": "*",
     "grunt-import": "*",
-    "grunt-contrib-coffee": "*"
+    "grunt-contrib-coffee": "*",
+    "ink-docstrap": "*",
+    "grunt-jsdoc": "*"
   }
 }
