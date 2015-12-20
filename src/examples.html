@@ -27,7 +27,7 @@
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="#">Home</a></li>
 				<li><a href="#about">About</a></li>
-				<li><a href="#contact">Contact</a></li>
+				<li><a href="#other">Other</a></li>
 			</ul>
 		</div><!--/.nav-collapse -->
 	</div>
@@ -36,7 +36,8 @@
 <div class="container" style="margin-top:40px;">
 	<div class="starter-template" id="GIRAFFE_APP">
 		<h1>Backbone.Giraffe examples</h1>
-		<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+		<hr/>
+
 	</div>
 
 </div><!-- /.container -->
@@ -49,6 +50,10 @@
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+<script>
+	// using custom template delimiters for mustache or handlebars style `{{ var }}` inserts
+	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+</script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
 <script src="backbone.giraffe.js"></script>
 <script src="backbone.giraffe.contrib.js"></script>

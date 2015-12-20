@@ -1519,19 +1519,23 @@
        * throws and error if the view name is not a key in the `viewLibrary` property.
        *
        * @param viewName {String} The name of the view, which MUST be listed in the
+       * @param viewOptions {*} Optional parameters to send to the view. If passed, will be sent to the view constructor
        * app._viewLibrary property, to be navigated to
        */
-      App.prototype.navigateToView = function (viewName) {
+      App.prototype.navigateToView = function (viewName, viewOptions) {
         var self = this;
         var viewConstructor = getNamedView(viewName);
         if (viewConstructor) {
           var previousView = self.activeView;
           if (previousView) previousView.remove();
           self.$el.empty();
-          self.activeView = new viewConstructor();
-          self.attach(self.activeView);
+			 var opts = (_.isObject(viewOptions))? viewOptions : {};
+          self.activeView = new viewConstructor(opts);
+			 self.attach(self.activeView);
         } else throw new Error('View, ' + viewName + ', does not exist');
       };
+
+		 App.prototype.setMainNav = function(id){};
 
       return App;
 

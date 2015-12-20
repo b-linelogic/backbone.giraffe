@@ -16,12 +16,33 @@ define(['text!template1.htm'], function(templates_1){
 			templateStrategy: "cache",
 			template: "home",
 			afterRender: function () {
-				console.log();
+				console.log("Rendered home view");
 			}
 		}),
 		myNamedView: Giraffe.View.extend({
-			//templateStrategy: "cache",
-			template: "MyNamedView"
+			templateStrategy: "cache",
+			template: "MyNamedView",
+			afterRender: function(){
+				console.log("Rendered MyNamedView");
+			}
+		}),
+		aboutView: Giraffe.View.extend({
+			templateStrategy: "cache",
+			template: "about",
+			serialize:function(){
+				var params = {};
+				if(this.routeInfo === 'A') params.message = 'Using option A <a class="btn btn-warning" href="#about">Up one level</a>'
+				else if(this.routeInfo === 'B') params.message = 'Using option B <a class="btn btn-warning" href="#about">Up one level</a>';
+				else {
+					params.message = 'No extra options received from route. <br/>';
+					params.message += '<a class="btn btn-primary" href="#about/a">Path A</a>&nbsp;';
+					params.message += '<a class="btn btn-info" href="#about/b">Path B</a>';
+				}
+				return params;
+			},
+			afterRender: function(){
+				console.log("Rendered AboutView");
+			}
 		})
 	};
 
@@ -34,9 +55,12 @@ define(['text!template1.htm'], function(templates_1){
 		routes: {
 			'': 'route:home',
 			'/': 'route:home',
-			'about': 'route:about',
+			'about': 'route:aboutView',
+			'about/a': 'route:aboutView_a',
+			'about/b': 'route:aboutView_b',
 			'contact': 'route:contact',
-			'myNamedView': 'route:myNamedView'
+			'myNamedView': 'route:myNamedView',
+			'other': 'route:myNamedView'
 		},
 		appEvents: {
 			/**
@@ -47,6 +71,7 @@ define(['text!template1.htm'], function(templates_1){
 			 */
 			'route:home': function (opts, route) {
 				this.navigateToView('home');
+				this.setMainNav('');
 			},
 			/**
 			 * Handler for a generic route event. The route param is used to
@@ -58,6 +83,20 @@ define(['text!template1.htm'], function(templates_1){
 			 */
 			'route:myNamedView': function (opts, route) {
 				this.navigateToView('myNamedView');
+				this.setMainNav('other');
+			},
+
+			'route:aboutView': function(opts,route){
+				this.navigateToView('aboutView');
+				this.setMainNav('about');
+			},
+			'route:aboutView_a': function(opts, route){
+				this.navigateToView('aboutView', {routeInfo:'A'});
+				this.setMainNav('about');
+			},
+			'route:aboutView_b': function(opts, route){
+				this.navigateToView('aboutView', {routeInfo: 'B'});
+				this.setMainNav('about');
 			}
 		},
 		/**
@@ -68,9 +107,17 @@ define(['text!template1.htm'], function(templates_1){
 			Backbone.history.history.back();
 		},
 
+		/**
+		 * @override Backbone.Giraffe.View.afterRender
+		 */
 		afterRender:function(){
 			console.log("App is rendered");
-		}
+		},
+
+		setMainNav:function(id){
+			$("#navbar li").removeClass('active');
+			$("#navbar li > a[href='#"+id+"']").closest('li').addClass('active');
+		},
 	});
 	ThisApp.attachTo("#GIRAFFE_APP");
 	Backbone.history.start(); // IMPORTANT. Required for route events to trigger. See http://backbonejs.org/#History-start
