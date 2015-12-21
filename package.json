@@ -35,6 +35,6 @@
     "grunt-contrib-coffee": "*",
     "ink-docstrap": "*",
     "grunt-jsdoc": "*",
-    "grunt-markdown": "*"
+    "grunt-md2html": "*"
   }
 }
