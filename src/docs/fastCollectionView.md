@@ -134,8 +134,8 @@ Let's add delete and clone buttons to let users visually modify the collection.
 
 ```html
 <script id='fruit-template' type='text/template'>
-  <li class='fruit' style='background-color: <%= attributes.color %>;'>
-    <h2><%= attributes.name %></h2>
+  <li class='fruit' style='background-color: {{ attributes.color }};'>
+    <h2>{{ attributes.name }}</h2>
     <button data-gf-click='onDelete'>delete</button>
     <button data-gf-click='onClone'>clone</button>
   </li>

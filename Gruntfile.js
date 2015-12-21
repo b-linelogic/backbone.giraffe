@@ -15,7 +15,14 @@ module.exports = function(grunt){
 			}
 		},
 		uglify: {},
-		copy: {},
+		copy: {
+			md2html_css:{
+				files: [
+					{src: ['src/docs/css/codestyle.css'], dest: 'md2html/css/codestyle.css'},
+					{src: ['src/docs/img/logo.png'], dest: 'md2html/img/logo.png'}
+				]
+			}
+		},
 
 
 		jsdoc: {
@@ -58,7 +65,72 @@ module.exports = function(grunt){
 					//'src/tests/configureTest.js': 'src/tests/configureTest.coffee'
 				}
 			}
+		},
+
+
+		/*markdown: {
+			doc: {
+				files: [
+					{
+						expand: true,
+						src: 'src/docs/!*.md',
+						dest: 'md_docs/',
+						ext: '.html'
+					}
+				],
+				options: {
+					template: 'myTemplate.jst',
+					preCompile: function(src, context){},
+					postCompile: function(src, context){},
+					templateContext: {},
+					contextBinder: false,
+					contextBinderMark: '@@@',
+					autoTemplate: true,
+					autoTemplateFormat: 'jst',
+					markdownOptions: {
+						gfm: true,
+						highlight: 'manual',
+						codeLines: {
+							before: '<span>',
+							after: '</span>'
+						}
+					}
+				}
+			}
+		},*/
+
+
+		md2html: {
+			multiple_files: {
+				options: {
+					layout: 'src/docs/layout.html',
+					//basePath: 'path/to',
+					markedOptions: {
+						gfm: true,
+						tables: true,
+						breaks:true,
+						smartypants: true,
+						langPrefix: 'code code-'
+					},
+
+					highlightjs: {
+						enabled: true,      // disabled by default
+						style: 'monokai',    // highlightjs default theme (theme file name without .css)
+						compressStyle: true, // minified version of the string based style sheet
+						options: {}          // options for the highlightjs constructor
+					}
+				},
+				files: [{
+					expand: true,
+					cwd: 'src/docs/',
+					//src: ['**/*.md'],
+					src: ['*.md'],
+					dest: 'md2html',
+					ext: '.html'
+				}]
+			}
 		}
+
 	});
 
 
@@ -68,6 +140,8 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.loadNpmTasks('grunt-markdown');
+	grunt.loadNpmTasks('grunt-md2html');
 	//grunt.loadNpmTasks('grunt-mrdoc');
 
 
@@ -77,6 +151,8 @@ module.exports = function(grunt){
 	grunt.registerTask('jsdoc', ['jsdoc:dev']);
 	grunt.registerTask('mrdoc', ['mrdoc:dev']);
 	grunt.registerTask('coffee-compile', ['coffee:compile']);
+	//grunt.registerTask('make-doc-from-md', ['markdown:doc']);
+	grunt.registerTask('make-doc-from-md2html', ['md2html:multiple_files', 'copy:md2html_css']);
 	//grunt.registerTask('doc', ['clean:doc', 'yuidoc']);
 
 }

@@ -1,24 +1,18 @@
-%include _README_INTRO.md
+## [Giraffe API](backbone.giraffe.html)
 
-## Download
+## [Examples](index.html)
 
-__Version {{VERSION}}__
-
-<p>
-<a href="https://raw.github.com/barc/backbone.giraffe/master/dist/backbone.giraffe.js" class="big-button">backbone.giraffe.js</a><em class="button-size-label">{{FILE_SIZE}}</em>
-</p>
-<p>
-<a href="https://raw.github.com/barc/backbone.giraffe/master/dist/backbone.giraffe.min.js" class="big-button">backbone.giraffe.min.js</a><em class="button-size-label">{{FILE_SIZE_MIN}}</em>
-</p>
-<p>
-<a href="https://raw.github.com/barc/backbone.giraffe/master/dist/backbone.giraffe.contrib.js" class="big-button big-green-button">backbone.giraffe.contrib.js</a><em class="button-size-label">{{FILE_SIZE_CONTRIB}}</em>
-</p>
-<p>
-<a href="https://raw.github.com/barc/backbone.giraffe/master/dist/backbone.giraffe.contrib.min.js" class="big-button big-green-button">backbone.giraffe.contrib.min.js</a><em class="button-size-label">{{FILE_SIZE_CONTRIB_MIN}}</em>
-</p>
-
-[Giraffe on Github](https://github.com/barc/backbone.giraffe)
-
-%include CHANGELOG.md
-
-%include _README_FOOTER.md
+- [View Basics](viewBasics.html)
+- [Template Strategies](templateStrategies.html)
+- [Lifecycle Management](lifecycleManagement.html)
+- [App Events](appEvents.html)
+- [Routers and App Events](routersAndAppEvents.html)
+- [App Initialization](appInitialization.html)
+- [View Document Events](documentEvents.html)
+- [View Data Events](dataEvents.html)
+- [View UI](viewUI.html)
+- [Menu Example](menuExample.html)
+- [View Flexibility](viewFlexibility.html)
+- [Collection View](collectionView.html)
+- [Fast Collection View](fastCollectionView.html)
+- [_TodoMVC on Github_](http://iamthe35th.github.io/todomvc/labs/architecture-examples/backbone.giraffe/index.html)

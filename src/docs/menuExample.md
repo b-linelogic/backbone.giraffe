@@ -87,7 +87,7 @@ MenuItemView = Giraffe.View.extend({
 
 ```html
 <script id="menu-item-template" type="text/template">
-  <a href="<%= href %>" class="<%= className %>"><%= name %></a>
+  <a href="{{ href }}" class="{{ className }}">{{ name }}</a>
 </script>
 ```
 
@@ -162,9 +162,9 @@ ContentItemView = Giraffe.View.extend({
 
 ```html
 <script id="content-item-template" type="text/template">
-  <% _.each(lines, function(line) { %>
-    <p>content for <%= line %></p>
-  <% }); %>
+  {{ _.each(lines, function(line) { }}
+    <p>content for {{ line }}</p>
+  {{ }); }}
 </script>
 ```
 

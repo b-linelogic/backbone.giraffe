@@ -56,11 +56,11 @@ bind click events to view methods.
 ```html
 <script id="view-template" type="text/template">
   <button data-gf-click="onAddModel">add model</button>
-  <% collection.each(function(model, index) { %>
-    <button data-gf-click="onRemoveModel" data-cid="<%= model.cid %>">
-      remove model <%= model.cid %>
+  {{ collection.each(function(model, index) { }}
+    <button data-gf-click="onRemoveModel" data-cid="{{ model.cid }}">
+      remove model {{ model.cid }}
     </button>
-  <% }); %>
+  {{ }); }}
 </script>
 ```
 

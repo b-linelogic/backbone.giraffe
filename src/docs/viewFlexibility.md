@@ -33,9 +33,9 @@ Here's the app's template:
 
 ```html
 <script id="parent-app-template" type="text/template">
-  <h2><%= name %></h2>
-  <h3><%= cid %></h3>
-  <button data-gf-click="render">Reset <%= name %></button>
+  <h2><%= name }}</h2>
+  <h3><%= cid }}</h3>
+  <button data-gf-click="render">Reset <%= name }}</button>
 </script>
 ```
 
@@ -221,29 +221,29 @@ Here's the child view's `serialize` function and `template`:
 
 ```html
 <script id="child-template" type="text/template">
-  <h3><%= cid %></h3>
+  <h3>{{= cid }}</h3>
 
-  <% if (showMoveUpButton) { %>
+  {{ if (showMoveUpButton) { }}
     <button data-gf-click="onMoveUp">&#9650;</button>
-  <% } %>
+  {{ } }}
 
-  <% if (showMoveDownButton) { %>
+  {{ if (showMoveDownButton) { }}
     <button data-gf-click="onMoveDown">&#9660;</button>
-  <% } %>
+  {{ } }}
 
   <button data-gf-click="onAddChild">Add a child</button>
-  <button data-gf-click="render">Render count: <%= renderCount%></button>
+  <button data-gf-click="render">Render count: {{= renderCount}}</button>
   <button data-gf-click="dispose">Dispose</button>
 
-  <% if (parentIsChildView) { %>
+  {{ if (parentIsChildView) { }}
     <label>
-      <input type="checkbox" data-gf-change="onToggleCache" <%= checkedAttr %>>
+      <input type="checkbox" data-gf-change="onToggleCache" {{= checkedAttr }}>
       Cache this view
     </label>
     <button data-gf-click="onAttachUsingHTML">
       Reattach to parent using jQuery method 'html'
     </button>
-  <% } %>
+  {{ } }}
 
   <div class="child-views"></div>
 </script>

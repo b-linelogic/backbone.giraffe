@@ -34,6 +34,7 @@
     "grunt-import": "*",
     "grunt-contrib-coffee": "*",
     "ink-docstrap": "*",
-    "grunt-jsdoc": "*"
+    "grunt-jsdoc": "*",
+    "grunt-markdown": "*"
   }
 }
