@@ -103,6 +103,13 @@ module.exports = function(grunt){
 		md2html: {
 			multiple_files: {
 				options: {
+
+					basePath: '',
+					author: "Rick Geneva, Kevin Carlson",
+					templateData:{
+
+					},
+
 					layout: 'src/docs/layout.html',
 					//basePath: 'path/to',
 					markedOptions: {
